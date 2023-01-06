@@ -22,15 +22,15 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
-
+import com.google.gson.Gson;
 
 
 
 public class Library {
 
     private ArrayList<Book> Books = new ArrayList<>();
-
+    Scanner scanner = new Scanner(System.in);
+    private User user;
     public Library() {
         populateLibrary();
     }
@@ -45,23 +45,7 @@ public class Library {
         } catch (IOException e) {
             e.printStackTrace();
         }
-//        String line = "";
-//        String splitBy ="";
-//        try {
-//
-//
-//            BufferedReader br = new BufferedReader(new FileReader("src/main/java/org/example/books_data.csv"));
-//            br.readLine();
-//            while((line = br.readLine())!= null) {
-//                String[] bookInfo = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
-//                Book newBook = new Book(Integer.parseInt(bookInfo[0]),bookInfo[1],bookInfo[2],bookInfo[3], bookInfo[4], bookInfo[5] );
-//                Books.add(newBook);
-//            }
-//        }
-//
-//        catch (IOException e) {
-//            e.printStackTrace();
-//        }
+
     }
 
     public void populateLibrary(){
@@ -89,9 +73,54 @@ public class Library {
             System.out.println(book);
         }
     }
+    public void login(){
+        System.out.println("Please enter your user name");
+    }
+
+    public void addNewUser(){
+        System.out.println("Please enter your user name");
+        String username = scanner.nextLine();
+        System.out.println("Please enter your password");
+        String password = scanner.nextLine();
+        Boolean isAdmin = false;
+        String isAdminInput = "";
+        while(!isAdminInput.equals("Y")&&!isAdminInput.equals("N")){
+            System.out.println("Admin? Y/N");
+            isAdminInput = scanner.nextLine().toUpperCase();
+        }
+        if(isAdminInput=="Y"){
+            isAdmin=true;
+        }
+        User newUser = new User(1,username,password,isAdmin);
+
+        JSONObject obj = new JSONObject();
+        obj.put("id", 1);
+        obj.put("username", username);
+        obj.put("password", password);
+        obj.put("isAdmin",isAdmin);
+
+        JSONParser jsonParser = new JSONParser();
+
+        try {
+            Object userFile = jsonParser.parse(new FileReader("src/main/resources/user_data.json"));
+            JSONArray jsonArray = (JSONArray) userFile;
+            jsonArray.add(obj);
+            FileWriter file = new FileWriter("src/main/resources/user_data.json");
+            file.write(jsonArray.toJSONString());
+            file.flush();
+            file.close();
+        }catch (FileNotFoundException e){
+            e.printStackTrace();
+        }catch (IOException e){
+            e.printStackTrace();
+        }catch (ParseException e){
+            e.printStackTrace();
+        }
+
+    }
 
     public static void main(String[] args) {
-        Library newLibrary = new Library();
-        newLibrary.printBooksInfomation();
+        Library library = new Library();
+        library.addNewUser();
     }
 }
