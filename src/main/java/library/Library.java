@@ -17,12 +17,13 @@ public class Library {
 
     public void populateLibrary(){
         String line = "";
-        String splitBy =",";
+        String splitBy ="";
         try {
             BufferedReader br = new BufferedReader(new FileReader("src/main/java/org/example/books_data.csv"));
+            br.readLine();
             while((line = br.readLine())!= null) {
-                String[] bookInfo = line.split(splitBy);
-                Book newBook = new Book(1,bookInfo[1],bookInfo[2],bookInfo[3], bookInfo[4], bookInfo[5] );
+                String[] bookInfo = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
+                Book newBook = new Book(Integer.parseInt(bookInfo[0]),bookInfo[1],bookInfo[2],bookInfo[3], bookInfo[4], bookInfo[5] );
                 Books.add(newBook);
             }
         }

@@ -67,9 +67,7 @@ public class Book {
 
     @Override
     public String toString() {
-
-
-        return (String.format("[%c %s written by %s Genre: %s Sub-genre: %s Published By: %s]", this.number, this.title, this.author, this.genre, this.subGenre, this.publisher));
+        return (String.format("[%d %s written by %s Genre: %s Sub-genre: %s Published By: %s]", this.number, this.title, this.author, this.genre, this.subGenre, this.publisher));
     }
 
 }
