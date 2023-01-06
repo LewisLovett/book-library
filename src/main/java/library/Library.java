@@ -32,7 +32,6 @@ public class Library {
     private ArrayList<Book> Books = new ArrayList<>();
 
     public Library() {
-        createJSONBooks();
         populateLibrary();
     }
 
