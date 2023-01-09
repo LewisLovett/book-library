@@ -1,1 +1,1 @@
-[{"password":"asfa","id":0,"isAdmin":true,"username":"Tim"},{"password":"df","id":1,"isAdmin":false,"username":"s"}]
+[{"booksLoanedOut":null,"password":"pass1","id":1,"isAdmin":true,"username":"user1"},{"booksLoanedOut":null,"password":"pass2","id":1,"isAdmin":false,"username":"user2"}]

@@ -8,13 +8,18 @@ public class Book {
     private String subGenre;
     private String publisher;
 
-    public Book(String number, String title, String author, String genre, String subGenre, String publisher) {
+    private int timesLoanedOut;
+
+
+
+    public Book(String number, String title, String author, String genre, String subGenre, String publisher, int timesLoanedOut) {
         this.number = number;
         this.title = title;
         this.author = author;
         this.genre = genre;
         this.subGenre = subGenre;
         this.publisher = publisher;
+        this.timesLoanedOut = timesLoanedOut;
     }
 
     public String getNumber() {
@@ -65,9 +70,17 @@ public class Book {
         this.publisher = publisher;
     }
 
+    public int getTimesLoanedOut() {
+        return timesLoanedOut;
+    }
+
+    public void setTimesLoanedOut(int timesLoanedOut) {
+        this.timesLoanedOut = timesLoanedOut;
+    }
+
     @Override
     public String toString() {
-        return (String.format("[%s %s written by %s | Genre: %s | Sub-genre: %s | Published By: %s]", this.number, this.title, this.author, this.genre, this.subGenre, this.publisher));
+        return (String.format("[%s %s written by %s | Genre: %s | Sub-genre: %s | Published By: %s | Amount of times loaned out: %s]", this.number, this.title, this.author, this.genre, this.subGenre, this.publisher, this.timesLoanedOut));
     }
 
 }
