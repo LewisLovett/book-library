@@ -43,25 +43,18 @@ public class LoanBooks {
 
     public static void updateLoanTimes(String bookNumber){
         JSONParser jsonParser = new JSONParser();
-
         try {
             Object bookFile = jsonParser.parse(new FileReader("src/main/resources/books_data.json"));
             JSONArray bookJsonArray = (JSONArray) bookFile;
-
             for (int i=0; i < bookJsonArray.size(); i++){
                 JSONObject bookObj = (JSONObject) bookJsonArray.get(i);
                 if(bookObj.get("Number").equals(bookNumber)) {
-
-
                     long timesLoanedOut = (long)bookObj.get("timesLoanedOut");
-
-
                     timesLoanedOut++;
                     bookObj.put("timesLoanedOut", timesLoanedOut);
                     bookJsonArray.set(i, bookObj);
                 }
             }
-
             FileWriter file = new FileWriter("src/main/resources/books_data.json");
             file.write(bookJsonArray .toJSONString());
             file.flush();
@@ -77,27 +70,19 @@ public class LoanBooks {
 
     public static void updateUserBooks(User user, String bookNumber){
         JSONParser jsonParser = new JSONParser();
-
         try {
             Object userFile = jsonParser.parse(new FileReader("src/main/resources/user_data.json"));
             JSONArray userJsonArray = (JSONArray) userFile;
 
             for (int i=0; i < userJsonArray.size(); i++){
-
                 JSONObject userObj = (JSONObject) userJsonArray.get(i);
-
-
-
                 if(userObj.get("id").equals (user.getId())) {
-
                     ArrayList<String> userBooks = (ArrayList<String>) userObj.get("booksLoanedOut");
                     userBooks.add(bookNumber);
-
                     userObj.put("booksLoanedOut", userBooks);
                     userJsonArray.set(i, userObj);
                 }
             }
-
             FileWriter file = new FileWriter("src/main/resources/user_data.json");
             file.write(userJsonArray.toJSONString());
             file.flush();

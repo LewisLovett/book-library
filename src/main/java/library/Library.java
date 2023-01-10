@@ -1,29 +1,15 @@
 package library;
 
-import org.json.CDL;
-
 import java.io.*;
 import java.util.ArrayList;
-
 import java.util.Scanner;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.stream.Collectors;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
-
 
 
 public class Library {
@@ -59,6 +45,7 @@ public class Library {
     }
 
     public void populateLoanedBooks(){
+        loanedBooks.clear();
         for (User user:users) {
             for (String bookNumber:user.getBooksLoanedOut()) {
                 loanedBooks.add(bookNumber);
@@ -71,6 +58,7 @@ public class Library {
         books.add(newBook);
     }
     public void getUsers(){
+        users.clear();
         JSONParser parser = new JSONParser();
         try(FileReader reader = new FileReader("src/main/resources/user_data.json")) {
             Object obj = parser.parse(reader);
@@ -177,18 +165,36 @@ public class Library {
             }
             System.out.println("Enter 1 to loan out a book");
             System.out.println("Enter 2 to view books loaned out");
+            System.out.println("Enter 3 to return book");
             if(currentUser.getAdmin()){
-                System.out.println("Enter 3 to create a new user");
+                System.out.println("Enter 4 to create a new user");
             }
             String input = scanner.nextLine();
             if(input.equals("1")){
                 LoanBooks.loanBook(scanner,loanedBooks,books,currentUser);
-                populateLoanedBooks();
+
 
             } else if (input.equals("2")) {
                 viewLoanedBooks();
+
             } else if (input.equals("3")) {
+                ReturnBook.returnBook(scanner,books,currentUser);
+
+            } else if (input.equals("4")&& currentUser.getAdmin()) {
                 addNewUser();
+            }else{
+                System.out.println("Please enter a valid input");
+            }
+            getUsers();
+            populateLoanedBooks();
+            updateCurrentUser();
+        }
+    }
+
+    public void updateCurrentUser(){
+        for (User user:users) {
+            if(currentUser.getId()== user.getId()){
+                currentUser = user;
             }
         }
     }
@@ -197,10 +203,14 @@ public class Library {
 
 
 
-
-
     public void viewLoanedBooks(){
-
+        for (String bookNumber: loanedBooks) {
+            for (Book book: books ){
+                if(book.getNumber().equals(bookNumber)){
+                    System.out.println(book);
+                }
+            }
+        }
     }
 
     public static void main(String[] args) {
