@@ -8,11 +8,11 @@ public class Book {
     private String subGenre;
     private String publisher;
 
-    private int timesLoanedOut;
+    private long timesLoanedOut;
 
 
 
-    public Book(String number, String title, String author, String genre, String subGenre, String publisher, int timesLoanedOut) {
+    public Book(String number, String title, String author, String genre, String subGenre, String publisher, long timesLoanedOut) {
         this.number = number;
         this.title = title;
         this.author = author;
@@ -70,11 +70,11 @@ public class Book {
         this.publisher = publisher;
     }
 
-    public int getTimesLoanedOut() {
+    public long getTimesLoanedOut() {
         return timesLoanedOut;
     }
 
-    public void setTimesLoanedOut(int timesLoanedOut) {
+    public void setTimesLoanedOut(long timesLoanedOut) {
         this.timesLoanedOut = timesLoanedOut;
     }
 

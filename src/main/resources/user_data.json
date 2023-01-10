@@ -1,1 +1,1 @@
-[{"booksLoanedOut":null,"password":"pass1","id":1,"isAdmin":true,"username":"user1"},{"booksLoanedOut":null,"password":"pass2","id":1,"isAdmin":false,"username":"user2"}]
+[{"booksLoanedOut":[],"password":"pass1","id":1,"isAdmin":true,"username":"user1"},{"booksLoanedOut":[],"password":"pass2","id":2,"isAdmin":false,"username":"user2"}]

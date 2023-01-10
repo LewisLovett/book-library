@@ -1,18 +1,21 @@
 package library;
 
+import java.util.ArrayList;
+
 public class User {
-    public User(int id, String username, String password, Boolean isAdmin) {
+    public User(int id, String username, String password, Boolean isAdmin,ArrayList<String> booksLoanedOut) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.isAdmin = isAdmin;
+        this.booksLoanedOut = booksLoanedOut;
     }
 
     private int id;
     private String username;
     private String password;
     private Boolean isAdmin;
-    private String[] booksLoanedOut;
+    private ArrayList<String> booksLoanedOut;
 
     public int getId() {
         return id;
@@ -46,11 +49,19 @@ public class User {
         isAdmin = admin;
     }
 
-    public String[] getBooksLoanedOut() {
+    public ArrayList<String> getBooksLoanedOut() {
         return booksLoanedOut;
     }
 
-    public void setBooksLoanedOut(String[] booksLoanedOut) {
+    public void addLoanedBook(String bookNumber){
+        this.booksLoanedOut.add(bookNumber);
+    }
+
+    public void returnBook(String bookNumber){
+        this.booksLoanedOut.remove(bookNumber);
+    }
+
+    public void setBooksLoanedOut(ArrayList<String> booksLoanedOut) {
         this.booksLoanedOut = booksLoanedOut;
     }
 }
