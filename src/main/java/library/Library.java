@@ -40,40 +40,7 @@ public class Library {
         populateLoanedBooks();
     }
 
-    public void createJSONBooks(){
 
-        InputStream inputStream = Library.class.getClassLoader().getResourceAsStream("books_data.csv");
-        String csvAsString = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
-        String json = CDL.toJSONArray(csvAsString).toString();
-        try {
-            Files.write(Path.of("src/main/resources/books_data.json"), json.getBytes(StandardCharsets.UTF_8));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        JSONParser jsonParser = new JSONParser();
-        try {
-            Object userFile = jsonParser.parse(new FileReader("src/main/resources/books_data.json"));
-            JSONArray bookJsonArray = (JSONArray) userFile;
-
-            for (int i=0; i < bookJsonArray.size(); i++){
-                JSONObject bookObj = (JSONObject) bookJsonArray.get(i);
-                bookObj.put("timesLoanedOut",0);
-            }
-
-            FileWriter file = new FileWriter("src/main/resources/books_data.json");
-            file.write(bookJsonArray .toJSONString());
-            file.flush();
-            file.close();
-        }catch (FileNotFoundException e){
-            e.printStackTrace();
-        }catch (IOException e){
-            e.printStackTrace();
-        }catch (ParseException e){
-            e.printStackTrace();
-        }
-
-    }
 
     public void populateLibrary(){
         JSONParser parser = new JSONParser();
@@ -92,7 +59,6 @@ public class Library {
     }
 
     public void populateLoanedBooks(){
-        System.out.println(users);
         for (User user:users) {
             for (String bookNumber:user.getBooksLoanedOut()) {
                 loanedBooks.add(bookNumber);
@@ -100,8 +66,8 @@ public class Library {
         }
     }
     public void addNewBook(JSONObject book){
-        long timesLoanedOut = 0;
-        Book newBook = new Book((String) book.get("Number"),(String)book.get("Title"),(String)book.get("Author"),(String)book.get("Genre"), (String)book.get("SubGenre"), (String)book.get("Publisher"),timesLoanedOut );
+
+        Book newBook = new Book((String) book.get("Number"),(String)book.get("Title"),(String)book.get("Author"),(String)book.get("Genre"), (String)book.get("SubGenre"), (String)book.get("Publisher"),(long)book.get("timesLoanedOut") );
         books.add(newBook);
     }
     public void getUsers(){
@@ -198,84 +164,40 @@ public class Library {
     public void mainMenu(){
         System.out.println("Main Menu");
         System.out.println(currentUser.getUsername());
-        if(currentUser.getBooksLoanedOut()!=null){
-            System.out.println("Books Loaned Out");
-            for (String bookNumber:currentUser.getBooksLoanedOut()) {
-                for(Book book: books){
-                    if(book.getNumber().equals(bookNumber)){
-                        System.out.println(book.getTitle());
+        while (true){
+            if(currentUser.getBooksLoanedOut()!=null){
+                System.out.println("Books you have loaned out:");
+                for (String bookNumber:currentUser.getBooksLoanedOut()) {
+                    for(Book book: books){
+                        if(book.getNumber().equals(bookNumber)){
+                            System.out.println(book.getTitle());
+                        }
                     }
                 }
             }
-        }
-        System.out.println("Enter 1 to loan out a book");
-        System.out.println("Enter 2 to view books loaned out");
-        if(currentUser.getAdmin()){
-            System.out.println("Enter 3 to create a new user");
-        }
-        String input = scanner.nextLine();
-        if(input.equals("1")){
-            loanBook();
-        } else if (input.equals("2")) {
-            viewLoanedBooks();
-        } else if (input.equals("3")) {
-            addNewUser();
-        }
-    }
+            System.out.println("Enter 1 to loan out a book");
+            System.out.println("Enter 2 to view books loaned out");
+            if(currentUser.getAdmin()){
+                System.out.println("Enter 3 to create a new user");
+            }
+            String input = scanner.nextLine();
+            if(input.equals("1")){
+                LoanBooks.loanBook(scanner,loanedBooks,books,currentUser);
+                populateLoanedBooks();
 
-    public void loanBook(){
-        System.out.println("Please enter the number of the book you wish to loan");
-        String bookNumber = scanner.nextLine();
-        if(loanedBooks.contains(bookNumber)){
-            System.out.println("That book has been loaned out");
-        }else{
-            if(doesBookExist(bookNumber)) {
-                currentUser.addLoanedBook(bookNumber);
-                updateLoanTimes(bookNumber);
-            }else{
-                System.out.println("That book does not exist");
+            } else if (input.equals("2")) {
+                viewLoanedBooks();
+            } else if (input.equals("3")) {
+                addNewUser();
             }
         }
-        mainMenu();
     }
 
-    public Boolean doesBookExist(String bookNumber){
-        return books.contains(bookNumber);
-    }
-
-    public void updateLoanTimes(String bookNumber){
-        JSONParser jsonParser = new JSONParser();
-
-        try {
-            Object userFile = jsonParser.parse(new FileReader("src/main/resources/books_data.json"));
-            JSONArray bookJsonArray = (JSONArray) userFile;
-
-            for (int i=0; i < bookJsonArray.size(); i++){
-                JSONObject bookObj = (JSONObject) bookJsonArray.get(i);
-                if(bookObj.get("Number").equals(bookNumber)) {
 
 
-                    long timesLoanedOut = (long)bookObj.get("timesLoanedOut");
 
 
-                    timesLoanedOut++;
-                    bookObj.put("timesLoanedOut", timesLoanedOut);
-                    bookJsonArray.set(i, bookObj);
-                }
-            }
 
-            FileWriter file = new FileWriter("src/main/resources/books_data.json");
-            file.write(bookJsonArray .toJSONString());
-            file.flush();
-            file.close();
-        }catch (FileNotFoundException e){
-            e.printStackTrace();
-        }catch (IOException e){
-            e.printStackTrace();
-        }catch (ParseException e){
-            e.printStackTrace();
-        }
-    }
 
     public void viewLoanedBooks(){
 
@@ -283,8 +205,8 @@ public class Library {
 
     public static void main(String[] args) {
         Library library = new Library();
-//        library.login();
-//        library.createJSONBooks();
-        library.updateLoanTimes("1");
+        library.login();
+
+
     }
 }
